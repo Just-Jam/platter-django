@@ -11,8 +11,10 @@ def index(request):
 
 def organizationsIndex(request):
     org_list = Organization.objects.order_by('name')
+    your_orgs = Organization.objects.filter(admin=request.user)
     context = {
         "org_list": org_list,
+        "your_orgs": your_orgs,
     }
     print(context)
     return render(request, 'restaurants/orgList.html', context)
@@ -25,6 +27,7 @@ def organizationDetails(request, organization_id):
         'org': org,
         'restaurants': restaurants
     }
+    # Add option to add restaurants
     return render(request, 'restaurants/orgDetails.html', context)
 
 def restaurantsIndex(request, organization_id, restaurant_id):

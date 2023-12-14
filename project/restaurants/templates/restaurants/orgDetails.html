@@ -1,21 +1,38 @@
-<h1>{{org.name}}<h1>
-<p>Head Office: {{org.head_office}}<p>
-
-{% if user.username == org.admin.username %}
-<p>Contact: {{org.contact}}<p>
-<p>Admin: {{org.admin}}<p>
-<h2>Restaurants<h2>
-    {% if restaurants %}
-    <ul>
-        {% for res in restaurants %}
-        <li><a href="/restaurants/orgs/{{ org.id }}/{{res.id}}">{{ res.name }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>No restaurants are available.</p>
-    {% endif %}
-<h2>Users<h2>
-<p>Add users<p>
-{% else %}
-Not Organization Admin
-{% endif %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{org.name}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <div class="page-header">
+      <h1>{{org.name}} Index Page</h1>
+    </div>
+    <div>
+        <h2>Head Office: {{org.head_office}}<h2>
+        {% if user.username == org.admin.username %}
+        <h2>Contact: {{org.contact}}<h2>
+        <h2>Admin: {{org.admin}}<h2>
+        <br>
+        <h2>{{org.name}} Restaurants<h2>
+            {% if restaurants %}
+            <ul>
+                {% for res in restaurants %}
+                <li><a href="/restaurants/orgs/{{ org.id }}/{{res.id}}">{{ res.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p>No restaurants are available.</p>
+            {% endif %}
+        <h2>Users<h2>
+        <p>Add users<p>
+        {% else %}
+        Not Organization Admin
+        {% endif %}
+    </div>
+    
+  </body>
+</html>
