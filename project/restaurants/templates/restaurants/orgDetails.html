@@ -28,11 +28,18 @@
                 <p>No restaurants are available.</p>
             {% endif %}
         <h2>Users<h2>
-        <p>Add users<p>
+        <h3>Add Restaurants</h3>
+        <form method="post" action="{% url 'restaurant:organizationDetails' organization_id=org.id%}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Restaurant</button>
+        </form>
+
         {% else %}
         Not Organization Admin
         {% endif %}
     </div>
+        
     
   </body>
 </html>

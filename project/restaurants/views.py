@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 
 from .models import Organization, Restaurant, RestaurantOutlet, User
+from .forms import CreateRestaurant, CreateUserForm
 # Create your views here.
 
 def index(request):
@@ -16,18 +17,37 @@ def organizationsIndex(request):
         "org_list": org_list,
         "your_orgs": your_orgs,
     }
-    print(context)
     return render(request, 'restaurants/orgList.html', context)
 
 def organizationDetails(request, organization_id):
     org = get_object_or_404(Organization, pk=organization_id)
     restaurants = Restaurant.objects.filter(parent_organization=org)
-    print(restaurants)
+    
+    # Handle form submission
+    if request.method == 'POST':
+        form = CreateRestaurant(request.POST)
+        print(f'Form Data: {request.POST}')
+        if form.is_valid():
+            print('Form is valid')
+            # Process the form data, save to the database, etc.
+            # For example, form.save() if CreateRestaurant is a ModelForm
+            # Redirect to avoid form resubmission on page refresh
+            restaurant_instance = form.save()
+            return redirect('restaurant:organizationDetails', organization_id=organization_id)
+        else:
+            print('Form has errors')
+            print(form.errors)
+            print(form.non_field_errors())
+    else:
+        # Display a new form for GET requests
+        form = CreateRestaurant()
+
     context = {
         'org': org,
-        'restaurants': restaurants
+        'restaurants': restaurants,
+        'form': form
     }
-    # Add option to add restaurants
+
     return render(request, 'restaurants/orgDetails.html', context)
 
 def restaurantsIndex(request, organization_id, restaurant_id):
