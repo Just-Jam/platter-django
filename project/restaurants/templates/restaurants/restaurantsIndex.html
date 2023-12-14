@@ -1,0 +1,13 @@
+<h1>{{restaurant.name}} Chains<h1>
+<h2>Under the {{org.name}} organization<h2>
+<h2>Outlets:<h2>
+
+{% if outlets %}
+    <ul>
+    {% for outlet in outlets %}
+    <a href="{% url 'restaurant:outletPage' outlet.name %}">{{outlet.location}}</a>
+    {% endfor %}
+        </ul>
+    {% else %}
+        <p>No outlets are available.</p>
+{% endif %}

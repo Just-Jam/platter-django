@@ -1,0 +1,18 @@
+<h1>Restaurant Index Page <h1>
+<a href="orgs">Organizations</a>
+<br/>
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+
+
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a>
+{% endif %}
+
+<script>
+    function log_console() {
+        console.log
+            ("Test");
+    }
+</script>

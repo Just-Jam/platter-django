@@ -1,0 +1,21 @@
+<h1>{{org.name}}<h1>
+<p>Head Office: {{org.head_office}}<p>
+
+{% if user.username == org.admin.username %}
+<p>Contact: {{org.contact}}<p>
+<p>Admin: {{org.admin}}<p>
+<h2>Restaurants<h2>
+    {% if restaurants %}
+    <ul>
+        {% for res in restaurants %}
+        <li><a href="/restaurants/orgs/{{ org.id }}/{{res.id}}">{{ res.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>No restaurants are available.</p>
+    {% endif %}
+<h2>Users<h2>
+<p>Add users<p>
+{% else %}
+Not Organization Admin
+{% endif %}

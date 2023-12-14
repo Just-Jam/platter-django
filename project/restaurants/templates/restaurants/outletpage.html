@@ -1,0 +1,29 @@
+<h1>{{outlet.restaurant.name}} {{outlet.location}} Outlet<h1>
+<h2>Team Members<h2>
+{% if team %}
+<ul>
+    {% for user in team %}
+        {{user.username}}
+    {% endfor %}
+</ul>
+{% else %}
+    <p>No team members in outlet</p>
+{% endif %}
+
+{% if user_in_team %}
+<h2>Team members only info <h2>
+{% endif %}
+
+{% if user == outlet.manager %}
+<h2>Manager only info <h2>
+    add team members
+    <form action="{% url 'restaurant:outletPage' outlet.name %}" method="post">
+        <label for="team_name">Enter name: </label>
+        <input
+          id="input_username"
+          type="text"
+          name="name_field"
+        />
+        <input type="submit" value="OK" />
+    </form>
+{% endif %}
