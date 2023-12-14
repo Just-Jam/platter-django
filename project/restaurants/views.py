@@ -4,7 +4,7 @@ from django.template import loader
 from django.urls import reverse
 
 from .models import Organization, Restaurant, RestaurantOutlet, User
-from .forms import CreateRestaurant, CreateUserForm
+from .forms import CreateRestaurant, CreateUserForm, CreateRestaurantOutlet
 # Create your views here.
 
 def index(request):
@@ -26,9 +26,7 @@ def organizationDetails(request, organization_id):
     # Handle form submission
     if request.method == 'POST':
         form = CreateRestaurant(request.POST)
-        print(f'Form Data: {request.POST}')
         if form.is_valid():
-            print('Form is valid')
             # Process the form data, save to the database, etc.
             # For example, form.save() if CreateRestaurant is a ModelForm
             # Redirect to avoid form resubmission on page refresh
@@ -54,11 +52,36 @@ def restaurantsIndex(request, organization_id, restaurant_id):
     org = get_object_or_404(Organization, pk=organization_id)
     restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
     outlets = RestaurantOutlet.objects.filter(restaurant=restaurant)
+
+    # Add outlets function
+    # Handle form submission
+    if request.method == 'POST':
+        form = CreateRestaurantOutlet(request.POST)
+        print(f'Form Data: {request.POST}')
+        if form.is_valid():
+            # Process the form data, save to the database, etc.
+            # For example, form.save() if CreateRestaurant is a ModelForm
+            # Redirect to avoid form resubmission on page refresh
+
+            restaurant_outlet = form.save(commit=False)
+            restaurant_outlet.restaurant = restaurant
+            restaurant_outlet.save()
+            return redirect('restaurant:restaurantsIndex', organization_id=organization_id, restaurant_id=restaurant_id)
+        else:
+            print('Form has errors')
+            print(form.errors)
+            print(form.non_field_errors())
+    else:
+        # Display a new form for GET requests
+        form = CreateRestaurantOutlet()
+
     context = {
         'org': org,
         'restaurant': restaurant,
-        'outlets': outlets
+        'outlets': outlets,
+        'form': form
     }
+
     return render(request, 'restaurants/restaurantsIndex.html', context)
 
 
