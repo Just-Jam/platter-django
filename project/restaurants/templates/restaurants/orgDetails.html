@@ -13,20 +13,20 @@
     </div>
     <div>
         <h2>Head Office: {{org.head_office}}<h2>
-        {% if user.username == org.admin.username %}
         <h2>Contact: {{org.contact}}<h2>
         <h2>Admin: {{org.admin}}<h2>
         <br>
         <h2>{{org.name}} Restaurants<h2>
-            {% if restaurants %}
-            <ul>
-                {% for res in restaurants %}
-                <li><a href="/restaurants/orgs/{{ org.id }}/{{res.id}}">{{ res.name }}</a></li>
-                {% endfor %}
-            </ul>
-            {% else %}
-                <p>No restaurants are available.</p>
-            {% endif %}
+        {% if restaurants %}
+        <ul>
+            {% for res in restaurants %}
+            <li><a href="/restaurants/orgs/{{ org.id }}/{{res.id}}">{{ res.name }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No restaurants are available.</p>
+        {% endif %}
+        {% if user.username == org.admin.username %}
         <h2>Users<h2>
         <h3>Add Restaurants</h3>
         <form method="post" action="{% url 'restaurant:organizationDetails' organization_id=org.id%}">

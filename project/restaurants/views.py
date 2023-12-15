@@ -82,6 +82,9 @@ def restaurantsIndex(request, organization_id, restaurant_id):
         'form': form
     }
 
+    if restaurant.parent_organization != org:
+        return HttpResponse(f"Restaurant not under {org.name}")
+
     return render(request, 'restaurants/restaurantsIndex.html', context)
 
 

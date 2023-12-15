@@ -12,7 +12,7 @@
       <h1>{{restaurant.name}} Chains</h1>
     </div>
     <div>
-        <h2>Under the {{org.name}} organization<h2>
+        <h2>Under the {{restaurant.parent_organization}} organization<h2>
         <h2>Outlets:<h2>
         <div>
             {% if outlets %}
@@ -26,12 +26,14 @@
             {% endif %}
         </div>
         <div>
+            {% if user == restaurant.parent_organization.admin %}
             <h3>Add Outlets</h3>
             <form method="post" action="{% url 'restaurant:restaurantsIndex' organization_id=org.id restaurant_id=restaurant.id %}">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Add Restaurant Outlet</button>
             </form>
+            {% endif %}
         </div>
     </div>
   </body>
