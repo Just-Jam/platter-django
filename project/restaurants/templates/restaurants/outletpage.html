@@ -1,29 +1,42 @@
-<h1>{{outlet.restaurant.name}} {{outlet.location}} Outlet<h1>
-<h2>Team Members<h2>
-{% if team %}
-<ul>
-    {% for user in team %}
-        {{user.username}}
-    {% endfor %}
-</ul>
-{% else %}
-    <p>No team members in outlet</p>
-{% endif %}
-
-{% if user_in_team %}
-<h2>Team members only info <h2>
-{% endif %}
-
-{% if user == outlet.manager %}
-<h2>Manager only info <h2>
-    add team members
-    <form action="{% url 'restaurant:outletPage' outlet.name %}" method="post">
-        <label for="team_name">Enter name: </label>
-        <input
-          id="input_username"
-          type="text"
-          name="name_field"
-        />
-        <input type="submit" value="OK" />
-    </form>
-{% endif %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{outlet.restaurant.name}} {{outlet.location}} Outlet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <div class="page-header">
+      <h1>{{outlet.restaurant.name}} {{outlet.location}} Outlet</h1>
+    </div>
+    <div>
+        <h2>Team Members<h2>
+        {% if team %}
+        <ul>
+            {% for user in team %}
+                <li>{{user.username}}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No team members in outlet</p>
+        {% endif %}
+        
+        {% if user_in_team %}
+        <h2>Team members only info - (Only team members can see this)<h2>
+        {% endif %}
+        
+        <h2>Managed by {{outlet.manager.username}}</h2>
+        {% if user == outlet.manager %}
+        <h2>Manager only info - (Only Manager can see this) <h2>
+        <h3>Add user to team</h3>
+        <form method="post" action="{% url 'restaurant:outletPage' outlet_name=outlet.name %}">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            <button type="submit">Add User to Team</button>
+        </form>
+        {% endif %}
+    </div>
+  </body>
+</html>

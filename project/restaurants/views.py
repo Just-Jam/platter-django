@@ -88,10 +88,35 @@ def restaurantsIndex(request, organization_id, restaurant_id):
 def outletPage(request, outlet_name):
     outlet = get_object_or_404(RestaurantOutlet, name=outlet_name)
     team = User.objects.filter(groups__name=outlet_name)
+    print(team)
+    print(outlet.name)
+
+    # Add user to team function
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        print(f'Form Data: {request.POST}')
+        if form.is_valid():
+            # Process the form data, save to the database, etc.
+            # For example, form.save() if CreateRestaurant is a ModelForm
+            # Redirect to avoid form resubmission on page refresh
+            user_instance = form.save()
+            print(user_instance)
+            user_instance.groups.add(outlet)
+            return redirect('restaurant:outletPage', outlet_name=outlet_name)
+            # return redirect('restaurant:index')
+        else:
+            print('Form has errors')
+            print(form.errors)
+            print(form.non_field_errors())
+    else:
+        # Display a new form for GET requests
+        form = CreateUserForm()
+
     context = {
         'outlet': outlet,
         'team': team,
-        'user_in_team': False
+        'user_in_team': False,
+        'user_form': form
     }
     # check if user in group
     current_user = request.user
@@ -99,20 +124,4 @@ def outletPage(request, outlet_name):
         context['user_in_team'] = True
     
     return render(request, 'restaurants/outletPage.html', context)
-
-def addTeamMember(request, outlet_name):
-    outlet = get_object_or_404(RestaurantOutlet, name=outlet_name)
-    # check if user is manager
-    if outlet.manager != request.user:
-        return HttpResponse("Not manager, cannot add members")
-    
-    else:
-        # Create new user
-        input_username = ""
-        input_email = ""
-        input_password = ""
-        new_user = User.objects.create_user(input_username, input_email, input_password)
-        # add user to outlet group
-        new_user.groups.add(outlet)
-        return HttpResponseRedirect(reverse("restaurant:orgs"))
         

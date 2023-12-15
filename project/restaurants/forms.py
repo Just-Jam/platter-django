@@ -4,10 +4,9 @@ from django.contrib.auth.models import User, Group
 from .models import Restaurant, RestaurantOutlet
 
 class CreateUserForm(UserCreationForm):
-    group = forms.CharField(max_length=50, required=True)
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'password']
 
 class CreateRestaurant(forms.ModelForm):
     class Meta:
